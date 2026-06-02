@@ -1,0 +1,115 @@
+{
+  "info": {
+    "name": "JSONPlaceholder API Tests",
+    "description": "API test collection for JSONPlaceholder, runnable in Postman or headless via Newman in CI. Demonstrates request chaining, environment variables, and JavaScript test assertions.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "GET all users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test('returns a non-empty array', () => {",
+                  "  pm.expect(body).to.be.an('array').that.is.not.empty;",
+                  "});",
+                  "pm.test('first user has an email', () => {",
+                  "  pm.expect(body[0].email).to.include('@');",
+                  "});",
+                  "// Save an id for the next request (request chaining demo)",
+                  "pm.environment.set('userId', body[0].id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET user by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{userId}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "const user = pm.response.json();",
+                  "pm.test('id matches the chained userId', () => {",
+                  "  pm.expect(user.id).to.eql(Number(pm.environment.get('userId')));",
+                  "});",
+                  "pm.test('response time under 2s', () => {",
+                  "  pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Posts",
+      "item": [
+        {
+          "name": "POST create post",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"newman test\",\n  \"body\": \"created via newman\",\n  \"userId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 201', () => pm.response.to.have.status(201));",
+                  "const post = pm.response.json();",
+                  "pm.test('echoes the title', () => {",
+                  "  pm.expect(post.title).to.eql('newman test');",
+                  "});",
+                  "pm.test('returns a numeric id', () => {",
+                  "  pm.expect(post.id).to.be.a('number');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
