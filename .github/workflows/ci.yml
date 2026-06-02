@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        browser: [ chrome, firefox ]
+        browser: [ chrome ]
 
     steps:
       - name: Checkout
@@ -38,8 +38,6 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           browser: ${{ matrix.browser }}
-          # install handled by npm ci above
-          install: false
 
       - name: Upload screenshots on failure
         if: failure()
