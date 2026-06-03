@@ -3,5 +3,8 @@
 import './commands';
 import 'allure-cypress';
 
-// Optional: fail fast on uncaught app exceptions only when relevant.
-// SauceDemo is stable, so we keep the default behaviour.
+// Block third-party analytics (backtrace.io) that block the page load event in CI.
+// These requests return 401 and prevent `load` from firing within the timeout.
+beforeEach(() => {
+  cy.intercept('POST', 'https://events.backtrace.io/**', { statusCode: 200 }).as('backtraceBlock');
+});

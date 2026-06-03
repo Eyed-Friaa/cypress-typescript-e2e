@@ -5,15 +5,14 @@ export default defineConfig({
   viewportWidth: 1920,
   viewportHeight: 1080,
   defaultCommandTimeout: 10000,
-  pageLoadTimeout: 120000,
+  pageLoadTimeout: 60000,
   requestTimeout: 15000,
   responseTimeout: 15000,
   video: true,
   screenshotOnRunFailure: true,
   retries: {
-    // Retry failing tests in CI to absorb flakiness; no retries locally so
-    // flakiness surfaces during development.
-    runMode: 2,
+    // 1 retry in CI — enough to catch real flakiness without wasting 24min
+    runMode: 1,
     openMode: 0,
   },
 
