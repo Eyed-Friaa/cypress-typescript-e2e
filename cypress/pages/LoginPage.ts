@@ -8,9 +8,9 @@ import { InventoryPage } from './InventoryPage';
 export class LoginPage extends BasePage {
   protected readonly path = '/';
 
-  private readonly usernameInput = '[data-test="username"]';
-  private readonly passwordInput = '[data-test="password"]';
-  private readonly loginButton = '[data-test="login-button"]';
+  private readonly usernameInput = '#user-name';
+  private readonly passwordInput = '#password';
+  private readonly loginButton = '#login-button';
   private readonly errorMessage = '[data-test="error"]';
 
   enterUsername(username: string): this {
