@@ -1,5 +1,4 @@
 import { defineConfig } from 'cypress';
-import { allureCypress } from 'allure-cypress/reporter';
 
 export default defineConfig({
   // ─── Global settings ──────────────────────────────────────────────────────
@@ -32,10 +31,10 @@ export default defineConfig({
     },
 
     setupNodeEvents(on, config) {
-      // Allure reporter
-      allureCypress(on, config, {
-        resultsDir: 'allure-results',
-      });
+      // Allure reporter (dynamic require to avoid TS module resolution issues)
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { allureCypress } = require('allure-cypress/reporter');
+      allureCypress(on, config, { resultsDir: 'allure-results' });
 
       // Log task — lets specs print to the terminal for debugging.
       on('task', {
