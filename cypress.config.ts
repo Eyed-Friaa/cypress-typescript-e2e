@@ -1,10 +1,12 @@
 import { defineConfig } from 'cypress';
+import { allureCypress } from 'allure-cypress/reporter';
 
 export default defineConfig({
   // ─── Global settings ──────────────────────────────────────────────────────
   viewportWidth: 1920,
   viewportHeight: 1080,
   defaultCommandTimeout: 10000,
+  pageLoadTimeout: 120000,
   requestTimeout: 15000,
   responseTimeout: 15000,
   video: true,
@@ -30,6 +32,11 @@ export default defineConfig({
     },
 
     setupNodeEvents(on, config) {
+      // Allure reporter
+      allureCypress(on, config, {
+        resultsDir: 'allure-results',
+      });
+
       // Log task — lets specs print to the terminal for debugging.
       on('task', {
         log(message: string) {

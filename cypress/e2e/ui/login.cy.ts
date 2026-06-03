@@ -18,6 +18,11 @@ describe('Authentication › Login', () => {
     });
   });
 
+  beforeEach(() => {
+    cy.clearCookies();
+    cy.clearLocalStorage();
+  });
+
   it('standard user can log in successfully', () => {
     new LoginPage()
       .visit()

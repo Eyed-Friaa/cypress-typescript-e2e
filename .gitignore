@@ -7,3 +7,5 @@ reports/
 *.log
 dist/
 .env
+allure-results/
+allure-report/
